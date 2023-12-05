@@ -1,0 +1,57 @@
+spin_manifest_version = 2
+
+[application]
+authors = ["karthik2804 <karthik.ganeshram@fermyon.com>"]
+description = ""
+name = "spin-spotify-unwrapped"
+version = "0.1.0"
+
+[[trigger.http]]
+route = "/api/..."
+component = "spin-spotify-unwrapped"
+
+
+[component.spin-spotify-unwrapped]
+source = "target/spin-spotify-unwrapped.wasm"
+allowed_outbound_hosts = [
+    "https://accounts.spotify.com/",
+    "https://api.spotify.com/",
+]
+key_value_stores = ["default"]
+exclude_files = ["**/node_modules"]
+[component.spin-spotify-unwrapped.build]
+command = "npm run build"
+
+[variables]
+auth_provider = { default = "spotify" }
+success_url = { default = "/" }
+error_url = { default = "/auth/error" }
+scopes = { default = "user-read-private,user-read-email,user-top-read,playlist-modify-private" }
+client_id = { required = true, secret = true }
+client_secret = { required = true, secret = true }
+tenant = { default = "" }
+
+[[trigger.http]]
+id = "trigger-login"
+component = "test"
+route = "/internal/login/..."
+
+[component.test]
+source = { url = "https://github.com/rajatjindal/oauth-login-spin/releases/download/v0.0.11/login.wasm", digest = "sha256:1d54f3b8b20b428ca7a18dec8453431bddf2383c636929cfbde71adf5428db41" }
+variables = { auth_provider = "{{ auth_provider }}", success_url = "{{ success_url }}", error_url = "{{ error_url }}", scopes = "{{ scopes }}", client_id = "{{ client_id }}", client_secret = "{{ client_secret }}", tenant = "{{ tenant }}" }
+allowed_outbound_hosts = [
+    "redis://*:*",
+    "mysql://*:*",
+    "postgres://*:*",
+    "http://*:*",
+    "https://*:*",
+]
+key_value_stores = ["default"]
+
+[[trigger.http]]
+route = "/..."
+component = "static-fileserver"
+
+[component.static-fileserver]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+files = [{ source = "assets", destination = "/" }]
