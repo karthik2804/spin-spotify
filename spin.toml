@@ -3,7 +3,7 @@ spin_manifest_version = 2
 [application]
 authors = ["karthik2804 <karthik.ganeshram@fermyon.com>"]
 description = ""
-name = "spin-spotify-unwrapped"
+name = "spin-spotify"
 version = "0.1.0"
 
 [[trigger.http]]

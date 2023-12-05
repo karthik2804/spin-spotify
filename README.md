@@ -18,11 +18,13 @@ CLIENT_SECRET=<your-client-secret>
 4. Install dependencies, then build and run your application locally
 ```bash
 npm install
+```
+```bash
 SPIN_VARIABLE_CLIENT_ID=$CLIENT_ID SPIN_VARIABLE_CLIENT_SECRET=$CLIENT_SECRET spin build --up
 ```
 
 Test your application by visiting [localhost:3000](http://localhost:3000/) in your browser!
 5. (Optional) Deploy to Fermyon Cloud. First, add the Fermyon custom subdomain you'd like to use to your [Spotify app's](https://developer.spotify.com/dashboard) list of redirect URLs. There should be an edit button at the bottom of the screen when you click into the application. Then deploy to Cloud via the following command:
 ```bash
-spin deploy --variable CLIENT_ID=$CLIENT_ID CLIENT_SECRET=$CLIENT_SECRET
+spin deploy --variable client_id=$CLIENT_ID --variable client_secret=$CLIENT_SECRET
 ```
